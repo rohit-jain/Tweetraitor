@@ -1,0 +1,49 @@
+Game for tweet annotation.
+
+-> Commands start with arrow
+
+-> rails new htt-final -d mysql
+
+change database name to htt
+Make a table named htt
+
+-> create database htt
+change database name in database.yml file and also put the password.
+make sounds folder in assets
+put all the images, css, and sounds in appropriate folders
+
+-> rails generate scaffold session
+-> rails generate model tweeple provider:string uid:string name:string vote:integer
+-> rails generate scaffold guest name:string score:integer
+-> rails generate scaffold feedback tweeple:references content:text
+
+Change gemfile. put gem mysql2 in test,development and pg in production
+add omniauth and twitter
+
+group :development, :test do
+ gem 'mysql2'
+end
+group :production do
+ gem 'pg'
+end
+gem 'omniauth'
+gem 'twitter'
+
+-> rails generate model vote_record tweeple:references vote:integer category:string tid:string
+-> rails generate model guest_vote_record guest:references vote:integer category:string tid:string
+-> rails generate controller home
+-> rails generate model football tweetId:string token1Id:integer token2Id:integer category:integer tweetText:string tweetToken1:string tweetToken2:string voteCat1:integer voteCat2:integer done:integer
+-> rails generate model cricket tweetId:string token1Id:integer token2Id:integer category:integer tweetText:string tweetToken1:string tweetToken2:string voteCat1:integer voteCat2:integer done:integer
+
+Import footballls and crickets sql files in db_backup folder.
+add default values to voteCat1, voteCat2, done to above migrations
+
+      t.integer :voteCat1 , :default=>0
+      t.integer :voteCat2 , :default=>0
+      t.integer :done , :default=>0
+
+-> rails generate model vocab word:string
+-> rails generate model guest_feedback guest:references email:string content:text
+-> rake db:migrate
+
+Please provide feedback at rohitjain.nsit@gmail.com, neerajgupta983@gmail.com, link4shashank@gmail.com
