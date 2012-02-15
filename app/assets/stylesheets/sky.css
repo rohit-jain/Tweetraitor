@@ -1,0 +1,66 @@
+html
+{
+    overflow: auto;
+}
+
+#container {
+	float: left;
+	width:64%;
+  overflow:hidden;
+  position:relative;
+}
+
+#tweet{
+	width: 500px;
+	height: 100px;
+	border: outset;
+	border-color: gray;
+}
+
+#category{
+	border:outset;
+	border-color: gray;
+}
+#display {
+	float: left;
+	width: 35%;
+	height: 612px;
+	position: relative;
+}
+.wordwrap { 
+   white-space: pre-wrap;      /* CSS3 */   
+   white-space: -moz-pre-wrap; /* Firefox */    
+   word-wrap: break-word;      /* IE */
+}
+
+#score{
+	border: outset;
+	border-color: gray;
+	margin: 0px;
+		
+}
+#sky {	
+    z-index:0;
+    overflow: hidden;
+    margin:0px;
+    width: 500px;
+    height: 500px;
+    background-image:url('../../assets/universe_rev.png');    
+    background-color:#000;
+	  background-position: 0px;
+	  background-repeat: repeat;
+	  border: outset;
+		border-color: gray;
+	  -moz-animation: dayByDay 50s linear 0s infinite;
+	-webkit-animation: dayByDay 50s linear 0s infinite;
+}
+@-moz-keyframes dayByDay
+{
+    from{background-position: 50% 100%;}
+  	to{background-position: 50% -100%;}
+}
+@-webkit-keyframes dayByDay
+{
+    from{background-position: 50% 100%;}
+    to{background-position: 50% -100%;}
+}

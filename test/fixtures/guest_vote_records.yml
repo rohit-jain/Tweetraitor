@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  guest: 
+  vote: 1
+  category: MyString
+  tid: MyString
+
+two:
+  guest: 
+  vote: 1
+  category: MyString
+  tid: MyString

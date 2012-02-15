@@ -1,0 +1,18 @@
+<p>Thank you for your valuable time and feedback.</p>
+<p>
+  <b>Content:</b>
+  <%= @feedback.content %>
+</p>
+
+<a href=<%= new_feedback_path %> class="super green button">
+	<span>New</span>
+</a>
+<% if guest_user %>
+<a href="/ghome" class="super green button">
+	<span>Back</span>
+</a>
+<%else%>
+<a href=<%= root_url %> class="super green button">
+	<span>Back</span>
+</a>
+<% end %>

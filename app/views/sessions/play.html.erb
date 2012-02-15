@@ -1,0 +1,587 @@
+<html>
+	<head>
+		<%= stylesheet_link_tag "sky.css" %>
+		<script type="text/javascript">
+			var BAR_HEIGHT=50;
+			var topOffset=50;
+			var BAR_SPEED=3;
+			var COLOR_STEP=0.01;
+			var nextColorIndex=0;
+			var MAX_ANGLE = Math.PI / 32;
+			var angle = MAX_ANGLE;
+			var angleAdjust = Math.PI / 3600;
+
+    	var collidesound = new Audio("../../assets/explodemini.ogg");
+    	      
+    	var asteroidImg = new Image();
+    	asteroidImg.src="../../assets/asteroid.png";      
+            
+			var shootingObject = new Image();
+			shootingObject.src="../../assets/starship.png"
+
+			var bulletImg = new Image();
+			bulletImg.src="../../assets/torpedo.png";
+			
+			var img = new Image();
+			img.src = '../../assets/gameover.png';			
+			
+
+			var tweetInCloud = new Array();
+			var cloudShiftY1=0;
+			var cloudShiftX1=0;
+			var cloudShiftY2=0;
+			var cloudShiftX2=0;
+			var curTwInd=0;
+			var changeTweet = true;
+			var targetToken="";
+			var nbullets=0;
+			var initNbullet=0;
+			var x,y;
+			var curTarInd=0;
+			var tarTwInd=-1;
+			var tarToken=0;
+			var rotDir=0;
+			var destroyIndex1=0;
+			var destroyIndex2=0;
+			var astInd=0;
+			var delay=0;
+			bulletArray = new Array();
+			
+			var WIDTH=500;
+			var HEIGHT=500;
+			var background_int;
+			var canvas;
+			
+			var life = 5;
+			
+			var twt_canvas;
+			var twt_link;
+			
+			var score;
+			var con;
+			var cat;
+			var g;
+			var pxs = new Array();
+			var rint = 60;
+
+			function init(){
+				canvas = document.getElementById('sky');
+				ctx=canvas.getContext('2d');
+				con = ctx;
+				for(var i = 0; i < 100; i++) {
+					pxs[i] = new Circle();
+					pxs[i].reset();
+				}
+				twt = document.getElementById("tweet");
+				cat=document.getElementById("category").getContext('2d');
+				score = document.getElementById("score").getContext('2d');
+				<% @currentTweetArray.each do |key|%>
+					tweetInCloud.push(new tweetCloud("<%= key.tweetId %>","<%= key.tweetText %>","<%= key.tweetToken1 %>","<%= key.tweetToken2 %>",40,10,60,20,ctx.canvas.width-60,20));
+				<% end %>
+				try {
+					drawScene();
+				} catch(err) {
+					alert(err + " description");
+				}
+				score.font = "17 pt Calibri";    
+				score.textAlign = "center";
+				score.fillStyle = "Black";
+				score.fillText("Leaderboard", (score.canvas.width/2), (score.canvas.height-275 ));
+				leaderboard();
+			
+				scene_int = setInterval(drawScene, 30);
+			}
+									
+			function clear() {
+				cat.clearRect(0, 0, cat.canvas.width, cat.canvas.height);
+			}
+			
+			function clear_board(){
+				score.clearRect(0, 0, score.canvas.width, score.canvas.height);				
+			}
+			
+			function clearColor() {
+				ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+			}			
+			
+			function hitToken(event) {
+
+				var keyCode;
+				//Hold keyCode
+				if(event == null) {//If event null
+					keyCode = window.event.keyCode;
+					//Get keyCode using window.event
+					Window.event.preventDefault();
+					//Stop default action
+				} else {
+					keyCode = event.keyCode;
+					event.preventDefault();
+				}
+				//alert(" You just pressed keycode "+keyCode);
+				var t1X = tweetInCloud[curTwInd].token1X;
+				var t1Y = tweetInCloud[curTwInd].token1Y;
+
+				var t2X = tweetInCloud[curTwInd].token2X;
+				var t2Y = tweetInCloud[curTwInd].token2Y;
+				var t1 = tweetInCloud[curTwInd].token1;
+				var t2 = tweetInCloud[curTwInd].token2;
+				var kCode = String.fromCharCode(keyCode).toLowerCase()
+				if(tarTwInd == -1) {
+					tarTwInd = curTwInd
+				}
+				if(curTwInd == tarTwInd) {
+					var a = targetToken.length
+					if(a == 0) {
+						//alert(kCode + t1[0]+ " t"+targetToken);
+						if(kCode == t1[0]) {
+							targetToken = t1;
+							tarToken = 0;
+							rotDir=-1;
+							bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t1X, t1Y, kCode, curTwInd, 0, tarToken));
+							curTarInd++;
+							nbullets++;
+
+						} else if((kCode == t2[0])) {
+							targetToken = t2;
+							tarToken = 1;
+							rotDir=1;
+							bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t2X, t2Y, kCode, curTwInd, 0, tarToken));
+							curTarInd++;
+							nbullets++;
+						}
+					} else if((curTarInd < a) && (kCode == targetToken[curTarInd])) {
+						if(curTarInd == a - 1) {
+							if(tarToken == 0) {
+								bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t1X, t1Y, kCode, curTwInd, 1, tarToken));
+							} else if(tarToken == 1) {
+								bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t2X, t2Y, kCode, curTwInd, 1, tarToken));
+							}
+						} else {
+							if(tarToken == 0) {
+								bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t1X, t1Y, kCode, curTwInd, 0, tarToken));
+							} else if(tarToken == 1) {
+								bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t2X, t2Y, kCode, curTwInd, 0, tarToken));
+							}
+						}
+						curTarInd++;
+						nbullets++;
+
+					}
+				}
+			}
+
+			function drawScene() {
+				draw();
+				ctx.globalAlpha = 1;				
+				ctx.save();							
+	      ctx.translate(ctx.canvas.width/2- 23, ctx.canvas.height-80);
+	      var pic = -50;
+	  		for (i = 0; i<life; i++){
+	  			ctx.drawImage(shootingObject, 0, 0, 463, 470, pic, -420, 30, 30)
+	  			pic += 32;
+	  		}
+				// rotate 45 degrees clockwise
+	  		ctx.rotate(rotDir*Math.PI / 10);
+	  		//ctx.translate(0,0);
+	  		var h = ctx.canvas.height;
+	  		
+				ctx.drawImage(shootingObject, 0, 0, 463, 470, 0, 0, 46, 47);
+        ctx.restore(); 
+				clear();
+				tweetFall();
+				if(delay>=100)
+				{
+					window.addEventListener('keydown', hitToken, false);
+					bullets();
+				}				
+				if(life==0){
+					clearInterval(scene_int);
+					setTimeout( "end();", 2000);
+				}				
+			}
+			
+			function bullets() {
+				var tempLength = bulletArray.length;
+				var tempflag = 0;
+				var tempInd = -1;
+				var t1X = (tweetInCloud[curTwInd].token1X);
+				var t1Y = (tweetInCloud[curTwInd].token1Y);
+
+				var t2X = (tweetInCloud[curTwInd].token2X);
+				var t2Y = (tweetInCloud[curTwInd].token2Y);
+				var toX = t1X;
+				var toY = t1Y;
+				var cldShiftY = cloudShiftY1;
+				var cldShiftX = cloudShiftX1;
+
+				var tintin = (tweetInCloud[curTwInd].tweetId);
+                
+				for(var j = initNbullet; j < tempLength; j++) {
+					ctx.save();
+					ctx.translate(bulletArray[j].x, bulletArray[j].y);
+					ctx.rotate((rotDir*Math.PI)/10);
+					ctx.drawImage(bulletImg, 0, 0, 172, 225, 0,0, 17, 22);
+					ctx.restore();
+					bulletArray[j].y += bulletArray[j].yinc;
+					bulletArray[j].x += bulletArray[j].xinc;
+
+					if(bulletArray[j].toId == 0) {
+						toX = t1X;
+						toY = t1Y;
+						cldShiftY = cloudShiftY1;
+						cldShiftX = cloudShiftX1;
+					} else if(bulletArray[j].toId == 1) {
+						toX = t2X;
+						toY = t2Y;
+						cldShiftY = cloudShiftY2;
+						cldShiftX = cloudShiftX2;
+					}
+
+					if(bulletArray[j].tInd == curTwInd)
+						if(((bulletArray[j].y <= (toY + cldShiftY + 5)) && (bulletArray[j].y >= (toY + cldShiftY - 5))) || ((bulletArray[j].x <= (toX + cldShiftX + 5)) && (bulletArray[j].x >= (toX + cldShiftX - 5))))// To-Do Add code for collision Detection
+						{ 
+						  
+							if(bulletArray[j].toId == 0) {
+								destroyIndex1=destroyIndex1+1;
+						
+					} else if(bulletArray[j].toId == 1) {
+						destroyIndex2=destroyIndex2+1;
+					}
+							var ko = tweetInCloud.length;
+							tempflag = 1;
+							tempInd = (curTwInd);
+							var tfin = bulletArray[j].fin;
+							var tToId = bulletArray[j].toId;
+							bulletArray.splice(j, 1);
+							// Probably add link list here or use two indexes to refer starting and beginning.
+							tempLength = bulletArray.length;
+							nbullets--;
+							if(ko > 0) {
+
+								//alert("id= "+tToId);
+								if(tfin == 1) {
+									getTweet(tintin, tToId);
+									leaderboard();
+									tweetInCloud.splice(tempInd, 1);
+									targetToken = "";
+									curTarInd = 0;
+									tarTwInd = -1;
+									rotDir=0;
+									cloudShiftY1 = 0;
+									cloudShiftX1 = 0;
+									cloudShiftY2 = 0;
+									cloudShiftX2 = 0;
+									delay=0;
+									destroyIndex1=0;
+									destroyIndex2=0;
+									if(curTwInd >= ko - 1) {
+										curTwInd = 0;
+									}
+									break;
+								}
+							}
+							if(ko == 1) {
+								clearInterval(scene_int);
+								setTimeout( "end();", 2000);			
+							}
+
+						}
+				}
+
+			}
+			
+			function end(){
+				twt.innerHTML="";
+				window.location.replace("/result?old=<%= @score_old %>")
+			}
+			
+			function leaderboard(){
+				//Leaderboard				
+				clear_board();
+				score.font = "17pt Calibri";    
+				score.textAlign = "center";
+				score.fillStyle = "Black";
+				score.fillText("Leaderboard", (score.canvas.width/2), (score.canvas.height-275 ));
+
+				console.log("leaderboard");
+				score.font = "12pt Calibri";    
+				score.textAlign = "center";
+				score.fillStyle = "Black";
+				var leaderboard_height= score.canvas.height-250;
+				var gap=0;
+				<% 
+					#if guest_user						
+					@playerlist = Tweeple.order("score ASC").limit(10).all;
+					@playerlist = @playerlist.reverse();
+					@i = 0;
+					@playerlist.each do |key| 
+						@score_i = key.score;
+				 		@print = "#{key.name} - #{@score_i}"; 
+				%>
+				score.fillText("<%= "#{@print}" %>", (score.canvas.width/2), (leaderboard_height+gap));				
+				gap+=20;
+				<%
+				 	end 
+				%>
+			}
+			
+			function Bullet(x, y, targetX, targetY, key, tInd, fin, toId) {
+				collidesound.src=collidesound.src;
+				collidesound.play();
+				this.x = x;
+				this.y = y;
+				this.targetX = targetX;
+				this.targetY = targetY;
+				this.key = key;
+				this.tInd = tInd;
+				this.fin = fin;
+				this.toId = toId;
+				var inc = incForTarget(x, y, targetX, targetY);
+				this.xinc = inc.x*5;
+				this.yinc = inc.y*5;
+				//console.log(key+" "+tInd+" "+finish);
+			}
+
+			function tweetCloud(tweetId, tweetTxt, token1, token2, tweetTxtX, tweetTxtY, token1X, token1Y, token2X, token2Y) {
+				this.tweetId = tweetId;
+				this.tweetTxt = tweetTxt;
+				this.token1 = token1;
+				this.token2 = token2;
+				this.tweetTxtX = tweetTxtX;
+				this.tweetTxtY = tweetTxtY;
+				this.token1X = token1X;
+				this.token1Y = token1Y;
+				this.token2X = token2X;
+				this.token2Y = token2Y;
+
+				var inc = incForTarget(token1X, token1Y, ctx.canvas.width / 2 - 10, ctx.canvas.height - 95);
+
+				this.xinc1 = inc.x;
+				this.yinc1 = inc.y;
+
+				var inc = incForTarget(token2X, token2Y, ctx.canvas.width / 2 + 10, ctx.canvas.height - 95);
+
+				this.xinc2 = inc.x;
+				this.yinc2 = inc.y;
+
+			}
+
+			function incForTarget(x, y, targetX, targetY) {
+
+				var dy = (targetY - y);
+				var dx = (targetX - x);
+				var steps = 0;
+				var xinc = 0;
+				var yinc = 0;
+				if(Math.abs(dy) > Math.abs(dx)) {
+					steps = Math.abs(dx);
+				} else {
+					steps = Math.abs(dy);
+				}
+				xinc = dx / steps;
+				yinc = dy / steps;
+
+				return {
+					x : xinc,
+					y : yinc
+				};
+			}
+
+			function tweetFall() {
+
+				var tX = tweetInCloud[curTwInd].tweetTxtX;
+				var tY = tweetInCloud[curTwInd].tweetTxtY;
+				var t1X = tweetInCloud[curTwInd].token1X;
+				var t1Y = tweetInCloud[curTwInd].token1Y;
+				var t2X = tweetInCloud[curTwInd].token2X;
+				var t2Y = tweetInCloud[curTwInd].token2Y;
+				var xinc1 = tweetInCloud[curTwInd].xinc1;
+				var yinc1 = tweetInCloud[curTwInd].yinc1;
+				var xinc2 = tweetInCloud[curTwInd].xinc2;
+				var yinc2 = tweetInCloud[curTwInd].yinc2;
+				var dT1=(tweetInCloud[curTwInd].token1).slice(destroyIndex1);
+				var dT2=(tweetInCloud[curTwInd].token2).slice(destroyIndex2);
+				var a = 0;
+				
+				if(changeTweet){
+					twt_text = tweetInCloud[curTwInd].tweetTxt.replace(/(http:\/\/\S+)/g, "<a href='$1' id=\"link\">$1</a>");
+					twt.innerHTML = twt_text;		
+					changeTweet = false;	
+					if tweetInCloud[curTwInd].tweetTxt.exists?("http:\\"){
+						document.getElementById("link").setAttribute("target", "_blank")	
+					}						
+				}
+				delay=delay+1;
+				if(delay>=100)
+				{				
+					changeTweet = true;
+					ctx.fillStyle = "White";
+					ctx.font = "11pt Calibri"	;			
+					ctx.fillText(dT1, t1X + cloudShiftX1, t1Y + cloudShiftY1);
+		       
+		       var b=91*astInd;
+		       
+		       ctx.drawImage(asteroidImg, 0, b, 109, 91, t1X + cloudShiftX1, t1Y + cloudShiftY1, 30, 28);
+		       ctx.fillText(dT2, t2X + cloudShiftX2, t2Y + cloudShiftY2);
+		       ctx.drawImage(asteroidImg, 0, b, 109, 91, t2X + cloudShiftX2, t2Y + cloudShiftY2, 30, 28);
+				
+					cat.font = "13pt Calibri";    
+					cat.textAlign = "center";
+					cat.fillStyle = "Red";
+					var spam_txt = "SPAM -> " + String(dT1);
+					var notSpam_txt = "NOT SPAM -> "+ String(dT2);
+					
+					cat.fillText(spam_txt, cat.canvas.width/2, cat.canvas.height/2-10);
+					
+					cat.fillStyle = "Green";
+					cat.fillText(notSpam_txt, cat.canvas.width/2, cat.canvas.height/2+20);
+	
+					//Update Tweet Position
+					cloudShiftY1 += yinc1;
+					cloudShiftX1 += xinc1;
+					cloudShiftY2 += yinc2;
+					cloudShiftX2 += xinc2;
+					astInd+=1;
+			        if(astInd==30)
+			        astInd=0;
+	
+					if((cloudShiftY1 >= ctx.canvas.height-100) || (cloudShiftX1 >= ctx.canvas.height-100)) {
+						cloudShiftY1 = 0;
+						cloudShiftX1 = 0;
+						cloudShiftY2 = 0;
+						cloudShiftX2 = 0;
+						delay=0;
+						curTwInd++;
+						curTarInd = 0;
+						targetToken = "";
+						tarTwInd = -1;
+						rotDir=0;
+						destroyIndex1=0;
+						destroyIndex2=0;
+						a = tweetInCloud.length;
+						if(curTwInd >= a) {
+							curTwInd = 0;
+						}
+						life -=1
+					}
+				}
+			}
+
+			function wrapText(context, text, x, y, maxWidth, lineHeight){
+			    var words = text.split(" ");
+			    var line = "";
+			 
+			    for (var n = 0; n < words.length; n++) {
+			        var testLine = line + words[n] + " ";
+			        var metrics = context.measureText(testLine);
+			        var testWidth = metrics.width;
+			        if (testWidth > maxWidth) {
+			            context.fillText(line, x, y);
+			            line = words[n] + " ";
+			            y += lineHeight;
+			        }
+			        else {
+			            line = testLine;
+			        }
+			    }
+			    context.text = line;
+			}
+			
+			function getTweet(tweetId, cat) {
+
+				var xmlhttp;
+				if((tweetId == "") || (cat == -1))//Check if they are empty
+				{
+					//required action
+
+					return;
+				}
+				if(window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp = new XMLHttpRequest();
+				} else {// code for IE6, IE5
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						//document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+					}
+				}
+				console.log(tweetId);
+				xmlhttp.open("GET", "/pt?tweetId=" + String(tweetId) + "&cat=" + String(cat) + "&type=" + "<%= @type %>", true);
+			    xmlhttp.send();
+			}
+			
+				
+		 	function Circle() {
+				this.s = {ttl:8000, xmax:5, ymax:2, rmax:10, rt:1, xdef:960, ydef:540, xdrift:4, ydrift: 4, random:true, blink:true};
+			
+				this.reset = function() {
+					this.x = (this.s.random ? WIDTH*Math.random() : this.s.xdef);
+					this.y = (this.s.random ? HEIGHT*Math.random() : this.s.ydef);
+					this.r = ((this.s.rmax-1)*Math.random()) + 1;
+					this.dx = (Math.random()*this.s.xmax) * (Math.random() < .5 ? -1 : 1);
+					this.dy = (Math.random()*this.s.ymax) * (Math.random() < .5 ? -1 : 1);
+					this.hl = (this.s.ttl/rint)*(this.r/this.s.rmax);
+					this.rt = Math.random()*this.hl;
+					this.s.rt = Math.random()+1;
+					this.stop = Math.random()*.2+.4;
+					this.s.xdrift *= Math.random() * (Math.random() < .5 ? -1 : 1);
+					this.s.ydrift *= Math.random() * (Math.random() < .5 ? -1 : 1);
+				}
+			
+				this.fade = function() {
+					this.rt += this.s.rt;
+				}
+			
+				this.draw = function() {
+					if(this.s.blink && (this.rt <= 0 || this.rt >= this.hl)) this.s.rt = this.s.rt*-1;
+					else if(this.rt >= this.hl) this.reset();
+					var newo = 1-(this.rt/this.hl);
+					con.beginPath();
+					con.arc(this.x,this.y,this.r,0,Math.PI*2,true);
+					con.closePath();
+					var cr = this.r*newo;
+					g = con.createRadialGradient(this.x,this.y,0,this.x,this.y,(cr <= 0 ? 1 : cr));
+					g.addColorStop(0.0, 'rgba(255,255,255,'+newo+')');
+					g.addColorStop(this.stop, 'rgba(77,101,181,'+(newo*.6)+')');
+					g.addColorStop(1.0, 'rgba(77,101,181,0)');
+					con.fillStyle = g;
+					con.fill();
+				}
+			
+				this.move = function() {
+					this.x += (this.rt/this.hl)*this.dx;
+					this.y += (this.rt/this.hl)*this.dy;
+					if(this.x > WIDTH || this.x < 0) this.dx *= -1;
+					if(this.y > HEIGHT || this.y < 0) this.dy *= -1;
+				}
+			
+				this.getX = function() { return this.x; }
+				this.getY = function() { return this.y; }
+			}		
+		
+			
+			function draw() {
+				con.clearRect(0,0,WIDTH,HEIGHT);
+				for(var i = 0; i < pxs.length; i++) {
+					pxs[i].fade();
+					pxs[i].move();
+					pxs[i].draw();
+				}
+			}
+		</script>
+	</head>
+	<body onLoad="init()">
+		<div id="display">
+			<canvas id="category" width="272" height="100"></canvas>
+			<canvas id="score" width="272" height="300"></canvas>
+		</div>
+		<!-- <a id="search" target="_blank">Search</a> -->
+		<div id="container">
+			<div id="tweet" class="wordwrap" width="500" height="100"></div>
+			<canvas id="sky" width="500" height="500"></canvas>
+		</div>
+		<div id="txtHint">
+		<!-- Content -->
+		</div>
+	</body>

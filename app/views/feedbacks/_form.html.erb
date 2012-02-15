@@ -1,0 +1,28 @@
+<%= form_for (@feedback) do |f| %>
+  <% if @feedback.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@feedback.errors.count, "error") %> prohibited this feedback from being saved:</h2>
+
+      <ul>
+      <% @feedback.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+	
+	<div id="feedback-area">	
+	    <% if guest_user %>
+		    <label for="Email">Email*</label>
+		    <input type="text" cols="60" id="Email" name="feedback[email]" size="30"></input>
+		  <% end %>
+	    <label for="Message">Message</label>
+	    <textarea cols="60" id="Message" name="feedback[content]" rows="30"></textarea>
+		  <input id="feedback_tweeple" style="visibility: hidden" name="feedback[tweeple]" size="30" type="text">
+	    
+	  	<input type="submit" value="Submit"  class="submit-button" />
+  </div>
+   <% if guest_user %>
+  <span style="font-size: 8">*Optional</span>
+  <% end %>
+<% end %>

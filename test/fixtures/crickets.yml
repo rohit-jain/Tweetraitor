@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  tweetId: MyString
+  token1Id: 1
+  token2Id: 1
+  category: 1
+  tweetText: MyString
+  tweetToken1: MyString
+  tweetToken2: MyString
+  voteCat1: 1
+  voteCat2: 1
+  done: 1
+
+two:
+  tweetId: MyString
+  token1Id: 1
+  token2Id: 1
+  category: 1
+  tweetText: MyString
+  tweetToken1: MyString
+  tweetToken2: MyString
+  voteCat1: 1
+  voteCat2: 1
+  done: 1

@@ -1,0 +1,34 @@
+<div style="text-align: center">
+	<img src="../../assets/gameover.png" alt="Game Over">
+	<br />
+	<h3> Score in this session: <%= @score.to_i - @old.to_i %> </h3>
+	
+	<h3> Cumulative Score: <%= @score.to_i %> </h3>
+	<% if @diff == 0 %>
+		<h4>No tweets annotated</h4>
+	<% else %>
+		<h4>Tweets annotated</h4>
+	<% end %>	
+	<% @tweets.zip(@votes).each do |key, vote| %>
+		<% if vote==0 %>
+		<p style="color: red"><%= key %></p>
+		<% else %>
+		<p style="color: green"><%= key %></p>
+		<% end %>		
+	<% end %>
+</div>
+
+<h4> Please give ur feedback. </h4>
+ 
+<a href="/feedback" class="super magenta button"> 
+	<span>Feedback</span> 
+</a>
+
+<h4>Want to Play Again. Choose your category.</h4>
+<a href="/play?type=football" class="super green button">
+	<span>Football - ElClassico</span>
+</a>
+
+<a href="/play?type=cricket" class="super green button">
+	<span>Cricket - IndvsAus</span>
+</a>
