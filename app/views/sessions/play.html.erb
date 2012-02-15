@@ -292,7 +292,7 @@
 			
 			function end(){
 				twt.innerHTML="";
-				window.location.replace("/gresult?old=<%= @score_old %>")
+				window.location.replace("/result?old=<%= @score_old %>")
 			}
 			
 			function leaderboard(){
@@ -311,23 +311,11 @@
 				var gap=0;
 				<% 
 					#if guest_user						
-						@playerlist = Guest.order("score ASC").limit(10).all;
-					#elsif current_user
-					#	@playerlist = Tweeple.order("score ASC").limit(10).all;
-					#end
+					@playerlist = Tweeple.order("score ASC").limit(10).all;
 					@playerlist = @playerlist.reverse();
 					@i = 0;
 					@playerlist.each do |key| 
-						#if(key.id==@current) 
-					 	#	@score_i = @score;
-						#else  
-							@score_i = key.score;
-						#end
-						if guest_user
-				%>
-				console.log("<%= @score_i %>");
-				<%	
-						end
+						@score_i = key.score;
 				 		@print = "#{key.name} - #{@score_i}"; 
 				%>
 				score.fillText("<%= "#{@print}" %>", (score.canvas.width/2), (leaderboard_height+gap));				
