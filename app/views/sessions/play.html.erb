@@ -32,7 +32,7 @@
 			var cloudShiftY2=0;
 			var cloudShiftX2=0;
 			var curTwInd=0;
-			var changeTweet = true;
+			var changeTweet=true;
 			var targetToken="";
 			var nbullets=0;
 			var initNbullet=0;
@@ -195,7 +195,7 @@
 					bullets();
 				}				
 				if(life==0){
-					clearInterval(scene_int);
+				  clearInterval(scene_int);
 					setTimeout( "end();", 2000);
 				}				
 			}
@@ -292,7 +292,7 @@
 			
 			function end(){
 				twt.innerHTML="";
-				window.location.replace("/result?old=<%= @score_old %>")
+				window.location.replace("/gresult?old=<%= @score_old %>")
 			}
 			
 			function leaderboard(){
@@ -311,11 +311,23 @@
 				var gap=0;
 				<% 
 					#if guest_user						
-					@playerlist = Tweeple.order("score ASC").limit(10).all;
+						@playerlist = Guest.order("score ASC").limit(10).all;
+					#elsif current_user
+					#	@playerlist = Tweeple.order("score ASC").limit(10).all;
+					#end
 					@playerlist = @playerlist.reverse();
 					@i = 0;
 					@playerlist.each do |key| 
-						@score_i = key.score;
+						#if(key.id==@current) 
+					 	#	@score_i = @score;
+						#else  
+							@score_i = key.score;
+						#end
+						if guest_user
+				%>
+				console.log("<%= @score_i %>");
+				<%	
+						end
 				 		@print = "#{key.name} - #{@score_i}"; 
 				%>
 				score.fillText("<%= "#{@print}" %>", (score.canvas.width/2), (leaderboard_height+gap));				
@@ -406,11 +418,12 @@
 				if(changeTweet){
 					twt_text = tweetInCloud[curTwInd].tweetTxt.replace(/(http:\/\/\S+)/g, "<a href='$1' id=\"link\">$1</a>");
 					twt.innerHTML = twt_text;		
-					changeTweet = false;	
-					if tweetInCloud[curTwInd].tweetTxt.exists?("http:\\"){
+					changeTweet = false;		
+					if (tweetInCloud[curTwInd].tweetTxt.indexOf("http:\\") != -1){
 						document.getElementById("link").setAttribute("target", "_blank")	
 					}						
 				}
+				
 				delay=delay+1;
 				if(delay>=100)
 				{				
@@ -418,13 +431,13 @@
 					ctx.fillStyle = "White";
 					ctx.font = "11pt Calibri"	;			
 					ctx.fillText(dT1, t1X + cloudShiftX1, t1Y + cloudShiftY1);
-		       
-		       var b=91*astInd;
-		       
-		       ctx.drawImage(asteroidImg, 0, b, 109, 91, t1X + cloudShiftX1, t1Y + cloudShiftY1, 30, 28);
-		       ctx.fillText(dT2, t2X + cloudShiftX2, t2Y + cloudShiftY2);
-		       ctx.drawImage(asteroidImg, 0, b, 109, 91, t2X + cloudShiftX2, t2Y + cloudShiftY2, 30, 28);
-				
+			       
+	        var b=91*astInd;
+	       
+	        ctx.drawImage(asteroidImg, 0, b, 109, 91, t1X + cloudShiftX1, t1Y + cloudShiftY1, 30, 28);
+	        ctx.fillText(dT2, t2X + cloudShiftX2, t2Y + cloudShiftY2);
+	        ctx.drawImage(asteroidImg, 0, b, 109, 91, t2X + cloudShiftX2, t2Y + cloudShiftY2, 30, 28);
+					
 					cat.font = "13pt Calibri";    
 					cat.textAlign = "center";
 					cat.fillStyle = "Red";
@@ -507,7 +520,7 @@
 					}
 				}
 				console.log(tweetId);
-				xmlhttp.open("GET", "/pt?tweetId=" + String(tweetId) + "&cat=" + String(cat) + "&type=" + "<%= @type %>", true);
+				xmlhttp.open("GET", "/guest_pt?tweetId=" + String(tweetId) + "&cat=" + String(cat) + "&type=" + "<%= @type %>", true);
 			    xmlhttp.send();
 			}
 			
