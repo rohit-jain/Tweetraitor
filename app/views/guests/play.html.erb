@@ -296,6 +296,7 @@
 			}
 			
 			function leaderboard(){
+				//Leaderboard				
 				clear_board();
 				score.font = "17pt Calibri";    
 				score.textAlign = "center";
@@ -308,10 +309,8 @@
 				score.fillStyle = "Black";
 				var leaderboard_height= score.canvas.height-250;
 				var gap=0;
-				<% 
-					#if guest_user						
-					@playerlist = Guest.order("score ASC").limit(10).all;
-					@playerlist = @playerlist.reverse();
+				<% 					
+					@playerlist = Guest.order("score DESC").limit(10).all;
 					@i = 0;
 					@playerlist.each do |key| 
 						@score_i = key.score;
