@@ -4,7 +4,6 @@
 		<meta name="author" content="Shashank Nayak">
 	  <meta name="author" content="Rohit Jain">
 	  <meta name="author" content="Neeraj Gupta">
-
 		<title>Classify!!</title>
 		<%= stylesheet_link_tag    "application" %>
 		<%= javascript_include_tag "application" %>
@@ -47,6 +46,10 @@
 				</nav>
 			</header>
 			<section class="round">
+				<div style="text-align: center">
+					<p class="super black button"><span>Type to Shoot</span></p>
+				</div>
+				
 				<%= yield %>
 
 				<% if !current_user && !guest_user %> <h3><span>Instructions</span></h3>
@@ -83,10 +86,7 @@
 					Rohit Jain | Neeraj Gupta | Shashank Nayak
 				</p>
 				<p>
-					NSIT(Netaji Subhas Institute Of Technology)
-				</p>
-				<p>
-					PRECOG @ IIIT-DELHI
+					IIIT | NSIT
 				</p>
 				<% end %>
 			</section>
