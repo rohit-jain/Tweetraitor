@@ -96,7 +96,7 @@ class GuestsController < ApplicationController
    if(@a[:voteCat2]==nil)
      @a[:voteCat2]=0;
    end
-   if(params[:cat]==0)
+   if(params[:cat].to_i==0)
      @a[:voteCat1]=@a[:voteCat1]+1;
    else
      @a[:voteCat2]=@a[:voteCat2]+1;
