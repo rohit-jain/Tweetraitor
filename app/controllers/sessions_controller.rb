@@ -68,9 +68,9 @@ class SessionsController < ApplicationController
      @a[:voteCat2]=0;
    end
    if(params[:cat]==0)
-     @a[:voteCat1]+=1;
+     @a[:voteCat1]=@a[:voteCat1]+1;
    else
-     @a[:voteCat2]+=1;
+     @a[:voteCat2]=@a[:voteCat2]+1;
    end
    if((@a[:voteCat1] + @a[:voteCat2])>=3)
      @a[:done]=1;
