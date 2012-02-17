@@ -19,8 +19,9 @@ body {
 	background-image: url(../../assets/universe.png);
 	background-position: 0px;
 	background-repeat: repeat;
-	-moz-animation: dayByDay 30s linear 0s infinite;
+/*	-moz-animation: dayByDay 30s linear 0s infinite;
 	-webkit-animation: dayByDay 30s linear 0s infinite;
+*/
 }
 div#simpleModal {
 	float: left;
