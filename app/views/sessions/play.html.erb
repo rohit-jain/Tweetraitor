@@ -51,7 +51,7 @@
 			var HEIGHT=500;
 			var background_int;
 			var canvas;
-			
+			var targetAdjustMargin=1;
 			var life = 5;
 			
 			var twt_canvas;
@@ -67,6 +67,11 @@
 			function init(){
 				canvas = document.getElementById('sky');
 				ctx=canvas.getContext('2d');
+				
+				var tokenMargin1=60;
+				var tokenMargin2=ctx.canvas.width-60;
+				
+				
 				con = ctx;
 				for(var i = 0; i < 100; i++) {
 					pxs[i] = new Circle();
@@ -76,7 +81,21 @@
 				cat=document.getElementById("category").getContext('2d');
 				score = document.getElementById("score").getContext('2d');
 				<% @currentTweetArray.each do |key|%>
-					tweetInCloud.push(new tweetCloud("<%= key.tweetId %>","<%= key.tweetText %>","<%= key.tweetToken1 %>","<%= key.tweetToken2 %>",40,10,60,20,ctx.canvas.width-60,20));
+				var dirRand=(Math.random()*11)>5;
+				    if(dirRand)
+				    {
+					  tokenMargin2=60;
+				      tokenMargin1=ctx.canvas.width-60;
+				      targetAdjustMargin=-1;
+				    }
+				    else
+				    {
+					  tokenMargin1=60;
+				      tokenMargin2=ctx.canvas.width-60;
+				      targetAdjustMargin=1;
+				    }
+				
+					tweetInCloud.push(new tweetCloud("<%= key.tweetId %>","<%= key.tweetText %>","<%= key.tweetToken1 %>","<%= key.tweetToken2 %>",40,10,tokenMargin1,20,tokenMargin2,20,targetAdjustMargin));
 				<% end %>
 				try {
 					drawScene();
@@ -136,15 +155,22 @@
 						if(kCode == t1[0]) {
 							targetToken = t1;
 							tarToken = 0;
+							if(t1X==60)
 							rotDir=-1;
-							bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t1X, t1Y, kCode, curTwInd, 0, tarToken));
+							else
+							rotDir=1;
+														bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t1X, t1Y, kCode, curTwInd, 0, tarToken));
 							curTarInd++;
 							nbullets++;
 
 						} else if((kCode == t2[0])) {
 							targetToken = t2;
 							tarToken = 1;
+							if(t2X==60)
+							rotDir=-1;
+							else
 							rotDir=1;
+							
 							bulletArray.push(new Bullet(ctx.canvas.width / 2 - 3, ctx.canvas.height - 95, t2X, t2Y, kCode, curTwInd, 0, tarToken));
 							curTarInd++;
 							nbullets++;
@@ -341,7 +367,7 @@
 				//console.log(key+" "+tInd+" "+finish);
 			}
 
-			function tweetCloud(tweetId, tweetTxt, token1, token2, tweetTxtX, tweetTxtY, token1X, token1Y, token2X, token2Y) {
+			function tweetCloud(tweetId, tweetTxt, token1, token2, tweetTxtX, tweetTxtY, token1X, token1Y, token2X, token2Y,adjustMargin) {
 				this.tweetId = tweetId;
 				this.tweetTxt = tweetTxt;
 				this.token1 = token1;
@@ -352,13 +378,13 @@
 				this.token1Y = token1Y;
 				this.token2X = token2X;
 				this.token2Y = token2Y;
-
-				var inc = incForTarget(token1X, token1Y, ctx.canvas.width / 2 - 10, ctx.canvas.height - 95);
-
+				
+				var inc = incForTarget(token1X, token1Y, ctx.canvas.width / 2 +(adjustMargin*2), ctx.canvas.height - 90);
+                
 				this.xinc1 = inc.x;
 				this.yinc1 = inc.y;
 
-				var inc = incForTarget(token2X, token2Y, ctx.canvas.width / 2 + 10, ctx.canvas.height - 95);
+				var inc = incForTarget(token2X, token2Y, ctx.canvas.width / 2+(adjustMargin*-2), ctx.canvas.height - 90);
 
 				this.xinc2 = inc.x;
 				this.yinc2 = inc.y;
@@ -422,16 +448,17 @@
 				if(delay>=delayLimit)
 				{				
 					changeTweet = true;
-					ctx.fillStyle = "White";
+									ctx.fillStyle = "Red";
 					ctx.font = "11pt Calibri"	;			
 					ctx.fillText(dT1, t1X + cloudShiftX1, t1Y + cloudShiftY1);
-		       
-		       var b=91*astInd;
-		       
-		       ctx.drawImage(asteroidImg, 0, b, 109, 91, t1X + cloudShiftX1, t1Y + cloudShiftY1, 30, 28);
-		       ctx.fillText(dT2, t2X + cloudShiftX2, t2Y + cloudShiftY2);
-		       ctx.drawImage(asteroidImg, 0, b, 109, 91, t2X + cloudShiftX2, t2Y + cloudShiftY2, 30, 28);
-				
+			       
+	        var b=91*astInd;
+	       
+	        ctx.drawImage(asteroidImg, 0, b, 109, 91, t1X + cloudShiftX1, t1Y + cloudShiftY1, 30, 28);
+	        ctx.fillStyle = "Green";
+	        ctx.fillText(dT2, t2X + cloudShiftX2, t2Y + cloudShiftY2);
+	        ctx.drawImage(asteroidImg, 0, b, 109, 91, t2X + cloudShiftX2, t2Y + cloudShiftY2, 30, 28);
+	
 					cat.font = "13pt Calibri";    
 					cat.textAlign = "center";
 					cat.fillStyle = "Red";
