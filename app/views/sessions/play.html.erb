@@ -46,7 +46,7 @@
 			var astInd=0;
 			var delay=0;
 			bulletArray = new Array();
-			
+			var delayLimit=100;
 			var WIDTH=500;
 			var HEIGHT=500;
 			var background_int;
@@ -189,7 +189,7 @@
         ctx.restore(); 
 				clear();
 				tweetFall();
-				if(delay>=100)
+				if(delay>=delayLimit)
 				{
 					window.addEventListener('keydown', hitToken, false);
 					bullets();
@@ -408,10 +408,18 @@
 					changeTweet = false;	
 					if (tweetInCloud[curTwInd].tweetTxt.indexOf("http:\\") != -1){
 						document.getElementById("link").setAttribute("target", "_blank")	
-					}						
+					}		
+					if(twt_text.length>100)
+					{
+						delayLimit=150;
+					}					
+					else
+					{
+						delayLimit=100;
+					}				
 				}
 				delay=delay+1;
-				if(delay>=100)
+				if(delay>=delayLimit)
 				{				
 					changeTweet = true;
 					ctx.fillStyle = "White";
