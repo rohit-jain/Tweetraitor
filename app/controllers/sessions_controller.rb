@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
         @currentTweetArray.push(key);
         @count+=1;
       end
-      break if @count==10
+      break if @count==50
     end
     
     @player=Tweeple.where(:id=>session[:tweeple_id]).first

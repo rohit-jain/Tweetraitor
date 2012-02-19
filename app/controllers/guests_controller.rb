@@ -66,7 +66,7 @@ class GuestsController < ApplicationController
         @count+=1;
       else
       end
-      break if @count==10
+      break if @count==50
     end
     
     @player=Guest.where(:id=>session[:guest_id]).first
