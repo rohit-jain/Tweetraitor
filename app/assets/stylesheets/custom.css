@@ -19,9 +19,8 @@ body {
 	background-image: url(../../assets/universe.png);
 	background-position: 0px;
 	background-repeat: repeat;
-/*	-moz-animation: dayByDay 30s linear 0s infinite;
-	-webkit-animation: dayByDay 30s linear 0s infinite;
-*/
+	/*-moz-animation: dayByDay 30s linear 0s infinite;
+	-webkit-animation: dayByDay 30s linear 0s infinite;*/
 }
 div#simpleModal {
 	float: left;
@@ -68,8 +67,8 @@ p {
 	font-weight: bold;
 	line-height: 1;
 	text-decoration: none;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
 	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
@@ -101,8 +100,8 @@ p {
 	font-size: 18px;
 	padding: 0;
 	border: 1px solid rgba(0, 0, 0, .25);
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
 }
 div.modal a.button {
 	float: right;
@@ -111,8 +110,8 @@ div.modal a.button {
 .super.button span {
 	display: block;
 	padding: 5px 12px 4px;
-	-webkit-border-radius: 14px;
-	-moz-border-radius: 14px;
+	-webkit-border-radius: 1px;
+	-moz-border-radius: 1px;
 	border-top: 1px solid rgba(255, 255, 255, .2);
 	line-height: 1;
 }
@@ -120,9 +119,11 @@ header {
 	float: left;
 	position: relative;
 	margin:	 auto;
+	margin-left: 95px;
 	padding-top: 20px;
 	padding-bottom: 20px;
 	width: 850px;
+	overflow: hidden;
 }
 header img {
 	background: #fff;
@@ -157,20 +158,22 @@ nav ul li a:hover {
 	text-decoration: underline;
 }
 section {
+	overflow: auto;
 	float: left;
-	position: relative;
-	margin:	 auto;
-	/*margin-top: 1em;
-	margin-left:0.8em;*/
+	position: absolute;
+	margin:	 auto;	
+	margin-top: 56px;
+	margin-left: 95px;
 	font-size: 120%;
 	padding: 20px;
 	width: 800px;
+	/*height: 670px;*/
 	/*background: #FFFFFF;*/
 	border-style: outset;
-	border-top-left-radius: 30px;
-	border-bottom-left-radius: 30px;
-	border-top-right-radius: 30px;
-	border-bottom-right-radius: 30px;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
 	background: rgb(181,189,200); /* Old browsers */
 	background: rgb(242,245,246); /* Old browsers */
 	background: rgb(242,245,246); /* Old browsers */

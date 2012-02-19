@@ -8,21 +8,25 @@
 		<%= stylesheet_link_tag    "application" %>
 		<%= javascript_include_tag "application" %>
 		<%= csrf_meta_tags %>
+		<%= stylesheet_link_tag "sky" %>		
+  	<script src="http://code.jquery.com/jquery-latest.js"></script>
+  	<%= javascript_include_tag "demo.js" %>
 	</head>
 	<body>
+		<div id="cover">
+		</div>
 		<div class="container">
 			<header>
-				<!--<a href="" id="showSimpleModal" class="super green button">
-				<span>Help</span>
-				</a>
-				-->
-				<% if current_user || guest_user %> <a href="/feedback" class="super magenta button"> <span>Feedback</span> </a>
+				<% if current_user || guest_user %> 
+					<a href="/feedback" class="super magenta button"> <span>Feedback</span> </a>
+					<a id="dstart" class="super green button"><span>Demo</span></a>
+					<a class="super green button" id="dend"><span>Stop</span></a>
 				<% end %>
 				<nav class="round">
 					<ul>
 						<% if guest_user %>
 						<li>
-							<a href="/ghome" class="super green button"> <span>Home</span> </a>
+							<a href="/" class="super green button"> <span>Home</span> </a>
 						</li>
 						<li>
 							<a href="/guest_signout" class="super green button"> <span>Logout</span> </a>
@@ -49,33 +53,53 @@
 				<div style="text-align: center">
 					<p style="font-size: 20px; font-weight: bolder"><span>Type to Shoot</span></p>
 				</div>
+				<% if current_user || guest_user %>
+				<div id="demo">
+					<div  id="dtweet">
+						<img src="../../assets/demo/tweet.png" />				
+					</div>					
+					<div id="game_img" >				
+						<img src="../../assets/demo/view.png" />	
+					</div>
+					<p id="read"></p>
+					<div id="life">	
+						<img src="../../assets/demo/life.png" />
+					</div>
+					
+					<div id="spam">
+						<img src="../../assets/demo/spam.png" />
+					</div>
+					<div id="notspam">
+						<img src="../../assets/demo/notspam.png" />
+					</div>
+					<div id="type" ></div>
+					<a id="dstart_on" class="super green button">
+						<span>Again</span>
+					</a>
+					<a class="green super button" id = "show_game">
+						<span>Got it</span>
+					</a>
+					<% if guest_user %>
+					<a href="/gplay?type=cricket" class="green super button" id = "cric">
+						<span>Cricket</span>
+					</a>
+					<a href="/gplay?type=football" class="green super button" id = "fball">
+						<span>Football</span>
+					</a>
+					<% else %>
+					<a href="/play?type=cricket" class="green super button" id = "cric">
+						<span>Cricket</span>
+					</a>
+					<a href="/play?type=football" class="green super button" id = "fball">
+						<span>Football</span>
+					</a>
+					<% end %>
+				</div>
+				<% end %>
 				
 				<%= yield %>
-
-				<% if !current_user && !guest_user %> <h3><span>Instructions</span></h3>
-				<ul>
-					<li>
-						Choose between events related to <span style="font-weight: bold">Cricket</span> and <span style="font-weight: bold">Football</span>.
-					</li>
-					<li>
-						Read the tweet.There will be a delay before the game starts.
-					</li>
-					<li>
-						Decide the category. <span style="color: red">SPAM</span> or <span style="color: green"> NOT SPAM</span>.
-					</li>
-					<li>
-						Type the word correspoding to the category.
-					</li>
-					<li style="font-style: italic">
-						If you miss a tweet it comes around again.
-					</li>
-				</ul>
-				<h5>Definition to help you decide.</h5>
-				<p>
-					<span style="color: green"> NOT SPAM</span>: Tweets related to event and are useful.
-					<br />
-					<span style="color: red">SPAM</span>: otherwise.
-				</p>
+				
+				<% if !current_user && !guest_user %> 
 				<br />
 				<h3 class="">Feedback</h3>
 				<p>

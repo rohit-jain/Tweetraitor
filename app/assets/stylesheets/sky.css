@@ -10,7 +10,125 @@ html
   position:relative;
 }
 
-#tweet{
+#imp{
+	display: inline-block;
+	padding: 5px 15px 6px;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 1;
+	text-decoration: none;
+}
+#shot{
+	display: none;
+	position: absolute;
+	pointer-events: none;
+	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
+	width: 800px;
+	height: 615px;
+	z-index: 1;
+ 	background: transparent;
+	background: none !important;
+}
+#dend{
+	margin-left: 5px;
+	display: none;
+	position: absolute;
+}
+#game_img{
+	display: none;
+	margin-top: 107px;
+	margin-left: 150px;
+	position: absolute;
+	pointer-events: none;
+	z-index: 1;
+}
+
+#dtweet{	
+	margin-top: 0px;
+	margin-left: 150px;
+	display: none;
+	position: absolute;
+	pointer-events: none;
+	z-index: 1;
+}
+
+#dstart_on{	
+	display: none;
+	margin-left: 310px;
+	margin-top: 450px;
+	position: absolute;
+	z-index: 2;
+	width: 96px;
+	text-align: center;
+}
+#show_game{	
+	display: none;
+	margin-left: 412px;
+	margin-top: 450px;
+	position: absolute;
+	z-index: 2;
+	width: 96px;
+	text-align: center;
+}
+
+#cric{
+	display: none;
+	margin-left: 310px;
+	margin-top: 520px;
+	position: absolute;
+	z-index: 2;
+	width: 96px;
+	text-align: center;
+}
+
+#fball{
+	display: none;
+	margin-left: 412px;
+	margin-top: 520px;
+	position: absolute;
+	z-index: 2;
+	width: 96px;
+	text-align: center;
+}
+
+#life{
+	display: none;
+	position: absolute;
+	margin-left: 324px;
+	margin-top: 113px;
+}
+
+#spam{
+	display: none;
+	position: absolute;
+	margin-left: 275px;
+	margin-top: 263px;
+}
+
+#notspam{
+	display: none;
+	position: absolute;
+	margin-left: 500px;
+	margin-top: 258px;
+}
+#cover{
+	position: absolute;
+	display:none; 
+	z-index: 2;
+	background-color: #000;
+	width: 100%;
+	height: 100%;
+}
+
+#read{
+	position: absolute;
+	color: white;	 
+	font-size: 15px;
+}
+
+#tweet{	
 	width: 500px;
 	height: 100px;
 	border: outset;

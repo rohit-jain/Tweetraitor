@@ -1,0 +1,88 @@
+<div align="center">
+	<a class="super green button" id="dstart">
+		<span>Start</span>
+	</a>
+	<a class="super green button" id="dend">
+		<span>Stop</span>
+	</a>
+</div>
+<div id="shot">	
+	<div id="dtweet"><p>Sample Tweet</p></div>
+	<div id="game_img"><img src="../../assets/demo.png" /></div>	
+</div>
+<p id="read"></p>
+<div id="life">	
+	<img src="../../assets/life.png" />
+</div>
+<div id="token">
+	<img src="../../assets/d_meteor.png" />
+</div>
+<div id="type" ></div>
+<script>
+	/* $("#dstart").click(function () {
+	  $("#game_img").show("fast");
+	  $('#dtweet').show("fast");
+	  $('#token').show("fast");
+	  $('#life').show("fast");
+	  $('#cover').fadeTo("slow", 0.80);
+	  $("#cover").show("slow");
+		//$('#dstart').hide("slow");
+	  //$("#dend").show("fast");
+		start();
+	});
+		
+	function start(){		
+	  $("#dstart_on").hide("slow");
+	  $("#show_game").hide("fast");
+	  $('#dtweet').css('z-index',2).delay(10000);
+	  $('#read').css('margin-left',370).css('margin-top',170);
+	  $('#read').html("Read the tweet.").fadeIn(200).delay(1000);
+	  $('#read').css('z-index',2).delay(1000);
+	  setTimeout(token, 5000 );
+	}
+	function token(){		
+	  $('#dtweet').fadeIn(2000).css('z-index',0);
+	  $('#token').fadeIn(1000).css('z-index',2);
+	  $('#read').css('z-index',0).delay(1000);
+	  $('#read').css({'margin-left':260 , 'margin-top':170, 'text-align':'center'});
+	  $('#read').html("Is it useful to the event.<br />YES<br >Type the green word before the meteor hits the ship.").fadeIn(200).delay(1000);
+	  $('#read').css('z-index',2).delay(1000);
+	  setTimeout(life, 6000 );
+	}
+	function life(){		
+	  $('#read').css('z-index',0).delay(1000);
+	  $('#read').css('margin-left',305).css('margin-top',200);
+	  $('#read').html("Make sure you dont run out of lives.").fadeIn(200).delay(1000);
+	  $('#read').css('z-index',2).delay(1000);
+	  $('#token').fadeIn(2000).css('z-index',0);
+	  $('#life').fadeIn(1000).css('z-index',2);
+	  setTimeout(end, 2000);
+	}
+	function end(){				
+	  $('#read').css('z-index',0).delay(1000);
+	  $('#life').fadeIn(2000).css('z-index',1);
+	  $("#dstart_on").show();
+	  $("#show_game").show();
+	}
+	function play(){
+		$('#cric').show();	
+		$('#fball').show();
+	}
+	
+	$("#dend").click(function () {
+	  $("#cover").hide(1000);
+	  $("#read").hide(1000);
+	});*/
+</script>
+	<a id="dstart_on" class="super green button" onclick="start()">
+		<span>Again</span>
+	</a>
+	<a class="green super button" id = "show_game" onclick="play()">
+		<span>Got it</span>
+	</a>
+	<a href="/gplay?type=cricket" class="green super button" id = "cric">
+		<span>Cricket</span>
+	</a>
+	<a href="/gplay?type=football" class="green super button" id = "fball">
+		<span>Football</span>
+	</a>

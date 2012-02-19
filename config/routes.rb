@@ -19,7 +19,7 @@ HttFinal::Application.routes.draw do
   match "/feedback" => "feedbacks#new"
   match "/view/xyz" => "feedbacks#index"
   match "/guest" => "guests#create"    
-  match "/ghome" => "guests#show"
+  #match "/ghome" => "guests#show"
   match "/gplay" => "guests#play"    
   match "/guest_pt(/:id)", :to => 'guests#putToken#id'
   match "/gresult" => "guests#result"
